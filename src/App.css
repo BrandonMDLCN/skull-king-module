@@ -1,0 +1,128 @@
+:root {
+  --wood-dark: #2c1e1a;
+  --gold: #d4af37;
+  --paper: #e8d5b5;
+  --ink: #2b2b2b;
+  --pirate-red: #a01a1a;
+}
+
+body {
+  margin: 0;
+  background-color: var(--wood-dark);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--ink);
+}
+
+.skull-king-theme {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.main-header {
+  text-align: center;
+  color: var(--gold);
+  border-bottom: 2px solid var(--gold);
+  margin-bottom: 25px;
+}
+
+.header-buttons {
+  margin: 15px 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Layout de dos columnas */
+.game-container {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.side-panel {
+  flex: 1; /* 25% */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-panel {
+  flex: 3; /* 75% */
+}
+
+/* Tarjetas estilo papel antiguo */
+.card {
+  background-color: var(--paper);
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+  border: 1px solid #c4a484;
+}
+
+/* Botones Piratas */
+.btn-pirate {
+  background: var(--pirate-red);
+  color: white;
+  border: 2px solid var(--gold);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.btn-pirate.gold {
+  background: var(--gold);
+  color: black;
+}
+
+.btn-pirate:hover { transform: scale(1.05); }
+
+/* Tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th {
+  border-bottom: 2px solid var(--wood-dark);
+  padding: 10px;
+  text-align: center;
+}
+
+td { padding: 8px; text-align: center; }
+
+.score-cell {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--pirate-red);
+}
+
+/* Inputs */
+.input-pirate, .input-number {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--wood-dark);
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.input-number { width: 50px; text-align: center; }
+
+/* Colores de piratas en las notas */
+.p-red { color: #ff4d4d; }
+.p-yellow { color: #ffd700; }
+.p-green { color: #44bd32; }
+.p-blue { color: #0097e6; }
+
+.ronda-badge {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  padding: 10px;
+  background: var(--wood-dark);
+  color: var(--gold);
+  border-radius: 5px;
+}
+
+.disabled { opacity: 0.5; cursor: not-allowed; }
