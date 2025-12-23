@@ -126,3 +126,53 @@ td { padding: 8px; text-align: center; }
 }
 
 .disabled { opacity: 0.5; cursor: not-allowed; }
+
+.multiplicador-aviso {
+  margin-top: 15px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: var(--gold);
+  text-align: center;
+  border: 1px dashed var(--gold);
+}
+
+.multiplicador-aviso.animar {
+  background: var(--pirate-red);
+  color: white;
+  border: 1px solid white;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.btn-pirate.blue {
+  background: #2980b9;
+  border-color: #3498db;
+}
+
+.edit-points {
+  border: 1px dashed var(--gold) !important;
+  background: rgba(212, 175, 55, 0.1) !important;
+  font-weight: bold;
+  color: var(--gold) !important;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.input-number:focus {
+  background: white !important;
+  color: black !important;
+  outline: 2px solid var(--gold);
+}

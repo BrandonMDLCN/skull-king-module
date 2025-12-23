@@ -33,22 +33,38 @@ function App() {
   const siguienteRonda = () => {
     const listos = jugadores.every(j => j.nombre !== "");
     if (!listos) return alert("¡Por las barbas de Neptuno! Todos los piratas deben tener nombre.");
-    
+
     setJuegoIniciado(true);
     if (rondaActual >= maxRondas) return alert("¡Tesoro encontrado! El juego ha terminado.");
+    
+    // DETERMINAR MULTIPLICADOR DE RONDA
+    let multiplicadorRonda = 1;
+    const proximaRondaNum = rondaActual + 1;
+
+    if (proximaRondaNum === maxRondas) {
+      multiplicadorRonda = 3; // Última ronda
+    } else if (proximaRondaNum === maxRondas - 1) {
+      multiplicadorRonda = 2; // Penúltima ronda
+    }
 
     const nuevosPuntos = jugadores.map(j => {
-      let puntosDeRonda = Number.parseInt(j.apuestaHecha);
-      if(Number.parseInt(j.apuestaGanada) === 0 && Number.parseInt(j.apuestaHecha) === 0) {
-        puntosDeRonda = 1; // Regla especial de apuesta 0
+      let puntosDeRonda = Number.parseInt(j.apuestaHecha) || 0;
+      
+      // Lógica de apuesta 0
+      if(Number.parseInt(j.apuestaGanada || 0) === 0 && Number.parseInt(j.apuestaHecha || 0) === 0) {
+        puntosDeRonda = 1; 
       } 
-      else if (Number.parseInt(j.apuestaHecha) !== Number.parseInt(j.apuestaGanada)) {
-        puntosDeRonda = -Math.abs(puntosDeRonda); // Puntos negativos si no coincide
+      // Si falla la apuesta, puntos negativos
+      else if (Number.parseInt(j.apuestaHecha || 0) !== Number.parseInt(j.apuestaGanada || 0)) {
+        puntosDeRonda = -Math.abs(puntosDeRonda);
       }
+
+      // Aplicar multiplicador especial de la ronda (x2 o x3)
+      const puntosCalculados = puntosDeRonda * multiplicadorRonda;
 
       return {
         ...j,
-        puntos: j.puntos + puntosDeRonda + Number.parseInt(j.puntosExtra || 0),
+        puntos: j.puntos + puntosCalculados + Number.parseInt(j.puntosExtra || 0),
         apuestaHecha: 0,
         apuestaGanada: 0,
         puntosExtra: 0
@@ -56,7 +72,17 @@ function App() {
     });
 
     setJugadores(nuevosPuntos);
-    setRondaActual(rondaActual + 1);
+    setRondaActual(proximaRondaNum);
+  };
+
+  // Lógica para el mensaje de aviso
+  const getMensajeMultiplicador = () => {
+    if (rondaActual === maxRondas) return "🏁 JUEGO TERMINADO";
+
+    const siguiente = rondaActual + 1;
+    if (siguiente === maxRondas) return "⚠️ ¡ÚLTIMA RONDA! PUNTOS x3";
+    if (siguiente === maxRondas - 1) return "🔥 ¡PENÚLTIMA RONDA! PUNTOS x2";
+    return "Ronda Estándar (x1)";
   };
 
   return (
@@ -95,6 +121,10 @@ function App() {
             <div className="ronda-badge">
               <span>RONDA</span>
               <strong>{rondaActual} / {maxRondas}</strong>
+            </div>
+            {/* MENSAJE DE MULTIPLICADOR */}
+            <div className={`multiplicador-aviso ${rondaActual + 1 >= maxRondas - 1 ? 'animar' : ''}`}>
+               {getMensajeMultiplicador()}
             </div>
           </div>
 
