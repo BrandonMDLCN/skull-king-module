@@ -119,8 +119,7 @@ function App() {
               </label>
             </div>
             <div className="ronda-badge">
-              <span>RONDA</span>
-              <strong>{rondaActual} / {maxRondas}</strong>
+              <strong>{(rondaActual !== maxRondas) ? "RONDA" + (rondaActual+1) + "/" + maxRondas : "Juego Terminado"}</strong>
             </div>
             {/* MENSAJE DE MULTIPLICADOR */}
             <div className={`multiplicador-aviso ${rondaActual + 1 >= maxRondas - 1 ? 'animar' : ''}`}>
