@@ -6,20 +6,20 @@ function App() {
   const [rondaActual, setRondaActual] = useState(0);
   const [juegoIniciado, setJuegoIniciado] = useState(false);
   const [jugadores, setJugadores] = useState([
-    { id: 1, nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0 }
+    { id: 1, nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0 , efectoPirata: 0}
   ]);
 
   const nuevoJuego = () => {
     if (window.confirm("¿Reiniciar la travesía, capitán?")) {
       setRondaActual(0);
       setJuegoIniciado(false);
-      setJugadores([{ id: 1, nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0 }]);
+      setJugadores([{ id: 1, nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0, efectoPirata: 0 }]);
     }
   };
 
   const agregarJugador = () => {
     setJugadores([...jugadores, { 
-      id: Date.now(), nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0 
+      id: Date.now(), nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0, efectoPirata: 0 
     }]);
   };
 
@@ -48,23 +48,30 @@ function App() {
     }
 
     const nuevosPuntos = jugadores.map(j => {
-      let puntosDeRonda = Number.parseInt(j.apuestaHecha) || 0;
+      let puntosDeRonda = 0;
       
       // Lógica de apuesta 0
       if(Number.parseInt(j.apuestaGanada || 0) === 0 && Number.parseInt(j.apuestaHecha || 0) === 0) {
-        puntosDeRonda = 1; 
+        puntosDeRonda = 1 + Number.parseInt(j.puntosExtra || 0); 
+        puntosDeRonda += Number.parseInt(j.efectoPirata || 0); // Aplicar efecto de carta de pirata
       } 
-      // Si falla la apuesta, puntos negativos
       else if (Number.parseInt(j.apuestaHecha || 0) !== Number.parseInt(j.apuestaGanada || 0)) {
-        puntosDeRonda = -Math.abs(puntosDeRonda);
+        let diferencia = Math.abs(Number.parseInt(j.apuestaHecha || 0) - Number.parseInt(j.apuestaGanada || 0));
+        puntosDeRonda = -Math.abs(diferencia);
+        puntosDeRonda -= Number.parseInt(j.efectoPirata || 0); // Aplicar efecto de carta de pirata
       }
+      else {
+        puntosDeRonda = Number.parseInt(j.apuestaHecha) + Number.parseInt(j.puntosExtra || 0);
+        puntosDeRonda += Number.parseInt(j.efectoPirata || 0); // Aplicar efecto de carta de pirata
+      }
+      
 
       // Aplicar multiplicador especial de la ronda (x2 o x3)
       const puntosCalculados = puntosDeRonda * multiplicadorRonda;
 
       return {
         ...j,
-        puntos: j.puntos + puntosCalculados + Number.parseInt(j.puntosExtra || 0),
+        puntos: j.puntos + puntosCalculados,
         apuestaHecha: 0,
         apuestaGanada: 0,
         puntosExtra: 0
@@ -83,6 +90,17 @@ function App() {
     if (siguiente === maxRondas) return "⚠️ ¡ÚLTIMA RONDA! PUNTOS x3";
     if (siguiente === maxRondas - 1) return "🔥 ¡PENÚLTIMA RONDA! PUNTOS x2";
     return "Ronda Estándar (x1)";
+  };
+  
+  const getMensajeRondas = () => {
+    if (rondaActual !== maxRondas) {
+      return `Ronda ${rondaActual+1} de ${maxRondas}`;
+    }
+    let ganadores = jugadores.filter(j => j.puntos === Math.max(...jugadores.map(j => j.puntos)));
+    if (ganadores.length > 1) {
+      return `¡Empate entre: ${ganadores.map(g => g.nombre).join(', ')}!`;
+    }
+    return `Ganador: ${jugadores.reduce((max, j) => j.puntos > max.puntos ? j : max, jugadores[0]).nombre}`;
   };
 
   return (
@@ -119,7 +137,7 @@ function App() {
               </label>
             </div>
             <div className="ronda-badge">
-              <strong>{(rondaActual !== maxRondas) ? "RONDA" + (rondaActual+1) + "/" + maxRondas : "Juego Terminado"}</strong>
+              <strong>{getMensajeRondas()}</strong>
             </div>
             {/* MENSAJE DE MULTIPLICADOR */}
             <div className={`multiplicador-aviso ${rondaActual + 1 >= maxRondas - 1 ? 'animar' : ''}`}>
@@ -151,6 +169,7 @@ function App() {
                   <th>Apuesta</th>
                   <th>Ganadas</th>
                   <th>Extra</th>
+                  <th>Efecto Pirata</th>
                 </tr>
               </thead>
               <tbody>
@@ -183,6 +202,13 @@ function App() {
                         type="number" className="input-number"
                         value={j.puntosExtra} 
                         onChange={(e) => actualizarJugador(j.id, 'puntosExtra', e.target.value)}
+                      />
+                    </td>
+                    <td>
+                      <input 
+                        type="number" className="input-number"
+                        value={j.efectoPirata} 
+                        onChange={(e) => actualizarJugador(j.id, 'efectoPirata', e.target.value)}
                       />
                     </td>
                   </tr>
