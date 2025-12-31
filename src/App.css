@@ -176,3 +176,29 @@ td { padding: 8px; text-align: center; }
   color: black !important;
   outline: 2px solid var(--gold);
 }
+
+.btn-control {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-control:hover {
+  background-color: #e0e0e0;
+}
+
+/* Quita las flechas por defecto del input para un look más limpio */
+.input-number::-webkit-inner-spin-button,
+.input-number::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.control-container { display: flex; align-items: center; gap: 5px; }
