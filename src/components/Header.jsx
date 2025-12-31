@@ -7,24 +7,11 @@ const Header = ({
   jugadores,
   rondaActual,
   maxRondas,
+  historialRondas,
+  setHistorialRondas,
+  nuevoJuego,
 }) => {
-  const nuevoJuego = () => {
-    if (window.confirm("¿Reiniciar la travesía, capitán?")) {
-      setRondaActual(0);
-      setJuegoIniciado(false);
-      setJugadores([
-        {
-          id: 1,
-          nombre: "",
-          puntos: 0,
-          apuestaHecha: 0,
-          apuestaGanada: 0,
-          puntosExtra: 0,
-          efectoPirata: 0,
-        },
-      ]);
-    }
-  };
+  
 
   const siguienteRonda = () => {
     const listos = jugadores.every((j) => j.nombre !== "");
@@ -47,7 +34,7 @@ const Header = ({
       multiplicadorRonda = 2; // Penúltima ronda
     }
 
-    const nuevosPuntos = jugadores.map((j) => {
+    const resultadosRonda = jugadores.map((j) => {
       let puntosDeRonda = 0;
       const apuesta = Number.parseInt(j.apuestaHecha || 0);
       const ganada = Number.parseInt(j.apuestaGanada || 0);
@@ -84,16 +71,30 @@ const Header = ({
       const puntosCalculados = puntosDeRonda * multiplicadorRonda;
 
       return {
-        ...j,
-        puntos: j.puntos + puntosCalculados,
-        apuestaHecha: 0,
-        apuestaGanada: 0,
-        puntosExtra: 0,
-        efectoPirata: 0,
-      };
+      nombre: j.nombre,
+      puntos: j.puntos + puntosCalculados,
+      puntosGanados: puntosDeRonda,
+      apuesta: j.apuestaHecha,
+      ganada: j.apuestaGanada,
+      puntosExtra: j.puntosExtra,
+      efectoPirata: j.efectoPirata
+    };
     });
 
-    setJugadores(nuevosPuntos);
+    // 2. Guardamos esta ronda en el historial sin borrar las anteriores
+    setHistorialRondas([...historialRondas, { numero: rondaActual + 1, datos: resultadosRonda }]);
+    const jugadoresConPuntosNuevos = jugadores.map(j => {
+    const puntosEstaRonda = resultadosRonda.find(r => r.nombre === j.nombre).puntosGanados;
+      return {
+        ...j,
+        puntos: j.puntos + puntosEstaRonda,
+        apuestaHecha: 0, // Reiniciamos para la nueva ronda
+        apuestaGanada: 0,
+        puntosExtra: 0,
+        efectoPirata: 0
+      };
+    });
+    setJugadores(jugadoresConPuntosNuevos);
     setRondaActual(proximaRondaNum);
   };
   return (
@@ -119,5 +120,8 @@ Header.propTypes = {
   setJugadores: PropTypes.func.isRequired,
   jugadores: PropTypes.array.isRequired,
   rondaActual: PropTypes.number.isRequired,
-  maxRondas: PropTypes.number.isRequired
+  maxRondas: PropTypes.number.isRequired,
+  historialRondas: PropTypes.array.isRequired,
+  setHistorialRondas: PropTypes.func.isRequired,
+  nuevoJuego: PropTypes.func.isRequired,
 };

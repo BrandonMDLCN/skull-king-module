@@ -202,3 +202,25 @@ td { padding: 8px; text-align: center; }
 }
 
 .control-container { display: flex; align-items: center; gap: 5px; }
+
+.historial-footer {
+  flex: 1; /* 25% */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.historial-entry {
+  border-left: 4px solid #f1c40f; /* Un color dorado pirata */
+  margin-bottom: 15px;
+  padding-left: 10px;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.puntos-positivos { color: #2ecc71; font-weight: bold; }
+.puntos-negativos { color: #e74c3c; font-weight: bold; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
