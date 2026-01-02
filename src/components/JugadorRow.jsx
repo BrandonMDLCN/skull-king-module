@@ -188,6 +188,7 @@ const JugadorRow = ({ j, actualizarJugador, esUltimo }) => {
             max="2"
             step="1"
             value={j.efectoPirata}
+            onFocus={(e) => e.target.select()}
             onKeyDown={manejarTabVertical}
             onChange={(e) =>
               actualizarJugador(j.id, "efectoPirata", e.target.value)
