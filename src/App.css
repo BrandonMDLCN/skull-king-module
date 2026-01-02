@@ -14,9 +14,11 @@ body {
 }
 
 .skull-king-theme {
-  padding: 20px;
+  padding: 10px;
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .main-header {
@@ -24,31 +26,61 @@ body {
   color: var(--gold);
   border-bottom: 2px solid var(--gold);
   margin-bottom: 25px;
+
+  /* --- INICIO DE CABECERA FIJA --- */
+  position: sticky;      /* Hace que el elemento se pegue */
+  top: 0;               /* Se pega al borde superior */
+  z-index: 10;        /* Asegura que quede por encima de las tablas y cartas */
+  background-color: var(--wood-dark); /* Es vital poner fondo para que no se transparente el texto de abajo */
+  padding: 10px 0;      /* Un poco de espacio para que luzca mejor al bajar */
+  /* --- FIN DE CABECERA FIJA --- */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .header-buttons {
   margin: 15px 0;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* Layout de dos columnas */
-.game-container {
+/* .game-container {
   display: flex;
   gap: 30px;
   align-items: flex-start;
-}
-
-.side-panel {
-  flex: 1; /* 25% */
+} */
+.game-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Por defecto una columna (Mobile First) */
   gap: 20px;
+  align-items: stretch;
 }
 
+/* Media Query para Tablets y PCs */
+@media (min-width: 992px) {
+  .game-container {
+    flex-direction: row; /* Volvemos a dos columnas en pantallas grandes */
+    align-items: flex-start;
+  }
+  
+  .side-panel {
+    flex: 1;
+    position: sticky; /* Opcional: El panel lateral se queda fijo al hacer scroll */
+    top: 20px;
+  }
+
+  .main-panel {
+    flex: 3;
+  }
+}
+
+/* --- OPTIMIZACIÓN DE TABLAS --- */
+/* Evita que la tabla desborde la pantalla en celulares */
 .main-panel {
-  flex: 3; /* 75% */
+  width: 100%;
+  overflow-x: auto; /* Scroll horizontal si la tabla es muy ancha */
 }
 
 /* Tarjetas estilo papel antiguo */
@@ -82,7 +114,45 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  min-width: 500px; /* Obligamos a la tabla a mantener un ancho mínimo para que sea legible */
+}
+
+.table-card {
+  width: 100%;
+  padding: 10px; /* Reducimos un poco el padding en móviles */
+  box-sizing: border-box; /* Asegura que el padding no sume al ancho total */
+  overflow: hidden; /* Evita que cualquier sombra o borde se escape */
+}
+
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto; /* Aquí ocurre la magia: scroll horizontal solo cuando es necesario */
+  -webkit-overflow-scrolling: touch; /* Suavidad en dispositivos iOS */
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .input-number {
+    width: 40px; /* Un poco más pequeños en celular */
+    padding: 2px;
+  }
+  
+  th, td {
+    padding: 5px; /* Reducimos espacio entre celdas */
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .winner-title { font-size: 1.8rem; }
+  .score-cell { font-size: 1.1rem; }
+  .main-header h1 { font-size: 1.5rem; }
+}
+
+/* Ajuste de inputs para que sean fáciles de tocar con el dedo */
+.input-number, .btn-control {
+  min-height: 35px;
+  min-width: 35px;
 }
 
 th {
@@ -223,4 +293,10 @@ td { padding: 8px; text-align: center; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+body:has(.modal-overlay) .main-header {
+  z-index: -1 !important;
+  pointer-events: none; /* Evita que el usuario haga clic en el header oculto */
+  opacity: 0.5; /* Opcional: lo hace ver tenue detrás del desenfoque */
 }

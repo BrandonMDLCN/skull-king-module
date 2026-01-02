@@ -1,9 +1,10 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Header from './components/Header';
 import InfoNote from './components/info-note';
 import Configuracion from './components/Configuracion';
 import JugadorRow from './components/JugadorRow';
+import GanadorModal from './components/GanadorModal';
 
 function App() {
   const [maxRondas, setMaxRondas] = useState(5);
@@ -13,6 +14,23 @@ function App() {
     { id: 1, nombre: '', puntos: 0, apuestaHecha: 0, apuestaGanada: 0, puntosExtra: 0 , efectoPirata: 0}
   ]);
   const [historialRondas, setHistorialRondas] = useState([]);
+  const [modalAbierto, setModalAbierto] = useState(true);
+
+  const finalizoJuego = rondaActual === maxRondas;
+  // Sincronización para que no se abra solo al cargar la página
+  useEffect(() => {
+    if (finalizoJuego) {
+      setModalAbierto(true);
+    }
+  }, [finalizoJuego]); // Solo se dispara cuando el valor de finalizoJuego cambia a true
+
+  useEffect(() => {
+    if (modalAbierto) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [modalAbierto]);
 
   const nuevoJuego = () => {
     if (window.confirm("¿Reiniciar la travesía, capitán?")) {
@@ -46,8 +64,20 @@ function App() {
     setJugadores(nuevosJugadores);
   };
 
+  const obtenerGanadores = () => {
+    const maxPuntos = Math.max(...jugadores.map(j => j.puntos));
+    return jugadores.filter(j => j.puntos === maxPuntos);
+  };
+
   return (
     <div className="skull-king-theme">
+      {finalizoJuego && modalAbierto && (
+        <GanadorModal 
+          ganadores={obtenerGanadores()} 
+          alCerrar={() => setModalAbierto(false)}
+          nuevoJuego={nuevoJuego}
+        />
+      )}
       <Header setRondaActual={setRondaActual} setJuegoIniciado={setJuegoIniciado} setJugadores={setJugadores} jugadores={jugadores} rondaActual={rondaActual} maxRondas={maxRondas} historialRondas={historialRondas} setHistorialRondas={setHistorialRondas} nuevoJuego={nuevoJuego}/>
 
       <div className="game-container">
@@ -64,23 +94,25 @@ function App() {
               <h2>Tripulación</h2>
               <button className="btn-small" onClick={agregarJugador}>+ Reclutar Pirata</button>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Nombre</th>
-                  <th>Puntos (x10)</th>
-                  <th>Apuesta</th>
-                  <th>Ganadas</th>
-                  <th>Extra</th>
-                  <th>Efecto Pirata</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jugadores.map((j, index) => (
-                  <JugadorRow key={j.id} j={j} actualizarJugador={actualizarJugador} esUltimo={index === jugadores.length - 1}/>
-                ))}
-              </tbody>
-            </table>
+            <div className="table-responsive-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Puntos (x10)</th>
+                    <th>Apuesta</th>
+                    <th>Ganadas</th>
+                    <th>Extra</th>
+                    <th>Efecto Pirata</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {jugadores.map((j, index) => (
+                    <JugadorRow key={j.id} j={j} actualizarJugador={actualizarJugador} esUltimo={index === jugadores.length - 1}/>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </main>
       </div><br/>

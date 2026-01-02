@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import PropTypes from 'prop-types';
 import './GanadorModal.css';
+import ReactDOM from 'react-dom';
 
 const GanadorModal = ({ ganadores, alCerrar, nuevoJuego }) => {
   useEffect(() => {
@@ -23,7 +24,7 @@ const GanadorModal = ({ ganadores, alCerrar, nuevoJuego }) => {
 
   const esEmpate = ganadores.length > 1;
 
-  return (
+  return ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modal-content winner-card">
         <h1 className="winner-title">{esEmpate ? "¡EMPATE PIRATA!" : "¡REY PIRATA!"}</h1>
@@ -44,7 +45,8 @@ const GanadorModal = ({ ganadores, alCerrar, nuevoJuego }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
