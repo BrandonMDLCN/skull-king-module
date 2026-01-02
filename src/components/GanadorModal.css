@@ -3,19 +3,16 @@
 /* Ganador Modal con Estética Pirata */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85); /* Casi opaco para cubrir el header */
+  inset: 0; /* Cubre top, left, right, bottom: 0 */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9); 
   display: flex;
   justify-content: center;
   align-items: center;
   
-  /* Elevamos el nivel al máximo posible */
-  z-index: 9999;
+  /* Un valor extremadamente alto para ganar a cualquier sticky */
+  z-index: 10000; 
   -webkit-backdrop-filter: blur(8px); /* Aumentamos el desenfoque para que resalte el modal */
   backdrop-filter: blur(8px);
 }
@@ -35,7 +32,7 @@
   max-height: 90vh; /* Evita que se salga de la pantalla verticalmente */
   overflow-y: auto; /* Scroll interno si el contenido es mucho */
   animation: popIn 0.5s cubic-bezier(0.26, 0.53, 0.74, 1.48);
-  z-index: 1000000;
+  z-index: 10000;
 }
 
 .winner-title {
@@ -127,8 +124,4 @@
 .btn-pirate.gold:active {
   transform: translateY(4px);
   box-shadow: none;
-}
-
-body.modal-open {
-  overflow: hidden; 
 }

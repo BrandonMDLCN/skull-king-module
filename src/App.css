@@ -14,26 +14,23 @@ body {
 }
 
 .skull-king-theme {
-  padding: 10px;
+  padding: 20px; 
   max-width: 1400px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
 }
 
 .main-header {
   text-align: center;
   color: var(--gold);
   border-bottom: 2px solid var(--gold);
-  margin-bottom: 25px;
-
-  /* --- INICIO DE CABECERA FIJA --- */
-  position: sticky;      /* Hace que el elemento se pegue */
-  top: 0;               /* Se pega al borde superior */
-  z-index: 10;        /* Asegura que quede por encima de las tablas y cartas */
-  background-color: var(--wood-dark); /* Es vital poner fondo para que no se transparente el texto de abajo */
-  padding: 10px 0;      /* Un poco de espacio para que luzca mejor al bajar */
-  /* --- FIN DE CABECERA FIJA --- */
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Bajado de 1000 a 100 */
+  background-color: var(--wood-dark);
+  padding: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -45,12 +42,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Layout de dos columnas */
-/* .game-container {
-  display: flex;
-  gap: 30px;
-  align-items: flex-start;
-} */
 .game-container {
   display: flex;
   flex-direction: column; /* Por defecto una columna (Mobile First) */
@@ -90,6 +81,7 @@ body {
   border-radius: 5px;
   box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
   border: 1px solid #c4a484;
+  scroll-margin-top: 110px;
 }
 
 /* Botones Piratas */
@@ -121,7 +113,6 @@ table {
   width: 100%;
   padding: 10px; /* Reducimos un poco el padding en móviles */
   box-sizing: border-box; /* Asegura que el padding no sume al ancho total */
-  overflow: hidden; /* Evita que cualquier sombra o borde se escape */
 }
 
 .table-responsive-container {
@@ -295,8 +286,4 @@ td { padding: 8px; text-align: center; }
   to { opacity: 1; transform: translateY(0); }
 }
 
-body:has(.modal-overlay) .main-header {
-  z-index: -1 !important;
-  pointer-events: none; /* Evita que el usuario haga clic en el header oculto */
-  opacity: 0.5; /* Opcional: lo hace ver tenue detrás del desenfoque */
-}
+

@@ -24,14 +24,6 @@ function App() {
     }
   }, [finalizoJuego]); // Solo se dispara cuando el valor de finalizoJuego cambia a true
 
-  useEffect(() => {
-    if (modalAbierto) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [modalAbierto]);
-
   const nuevoJuego = () => {
     if (window.confirm("¿Reiniciar la travesía, capitán?")) {
       setRondaActual(0);
