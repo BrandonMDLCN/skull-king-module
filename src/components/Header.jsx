@@ -84,10 +84,10 @@ const Header = ({
     // 2. Guardamos esta ronda en el historial sin borrar las anteriores
     setHistorialRondas([...historialRondas, { numero: rondaActual + 1, datos: resultadosRonda }]);
     const jugadoresConPuntosNuevos = jugadores.map(j => {
-    const puntosEstaRonda = resultadosRonda.find(r => r.nombre === j.nombre).puntosGanados;
+    const puntosEstaRonda = resultadosRonda.find(r => r.nombre === j.nombre).puntos;
       return {
         ...j,
-        puntos: j.puntos + puntosEstaRonda,
+        puntos: puntosEstaRonda,
         apuestaHecha: 0, // Reiniciamos para la nueva ronda
         apuestaGanada: 0,
         puntosExtra: 0,
